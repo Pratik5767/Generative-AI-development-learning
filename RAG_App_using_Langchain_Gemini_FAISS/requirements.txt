@@ -1,0 +1,8 @@
+langchain 
+langchain-community 
+google-generativeai 
+tiktoken 
+rapidocr-onnxruntime 
+python-dotenv 
+langchain-google-genai 
+faiss-cpu
