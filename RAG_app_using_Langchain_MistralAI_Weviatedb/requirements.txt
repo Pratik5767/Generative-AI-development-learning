@@ -1,0 +1,9 @@
+weaviate-client
+langchain
+tiktoken
+pypdf
+rapidocr
+rapidocr-onnxruntime
+langchain-community
+langchain_weaviate
+langchain-huggingface
