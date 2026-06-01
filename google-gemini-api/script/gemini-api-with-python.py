@@ -2,10 +2,8 @@
 # The Python SDK for the Gemini API, is contained in the
 # [`google-generativeai`](https://pypi.org/project/google-generativeai/) package. Install the dependency using pip:
 
-
 # %%
-%pip install -q -U google-generativeai
-
+# %pip install -q -U google-generativeai
 
 # %% [markdown]
 # ## Import packages
@@ -13,10 +11,12 @@
 
 # %%
 import google.generativeai as genai
-import pathlib
 import textwrap
 from IPython.display import display
 from IPython.display import Markdown
+import os
+from dotenv import load_dotenv
+import PIL.Image
 
 
 # %%
@@ -42,7 +42,6 @@ display(result)
 # google.com/app/apikey" target="_blank" rel="noopener
 # noreferrer">Get an API key</a>
 
-
 # %% [markdown]
 # 1 In Colab, add the key to the secrets manager under the "🔑" the left panel. Give it the name `GOOGLE_API_KEY`.
 # 
@@ -54,7 +53,6 @@ display(result)
 # (the SDK will automatically pick it up from there).
 # * Pass the key to `genai.configure(api_key=...)`
 
-
 # %%
 #### use to securly store your API key in colab
 
@@ -64,8 +62,6 @@ display(result)
 
 # %%
 ### get api key from .env
-import os
-from dotenv import load_dotenv
 load_dotenv()
 
 GEMINI_API_KEY = os.getenv('GOOGLE_API_KEY')
@@ -73,7 +69,6 @@ genai.configure(api_key=GEMINI_API_KEY)
 
 for models in genai.list_models():
     print(models)
-
 
 # %%
 for models in genai.list_models():
@@ -88,36 +83,27 @@ for models in genai.list_models():
 # %%
 model = genai.GenerativeModel("gemini-2.5-flash")
 
-
-# %%
-%%time
+# %%time
 response = model.generate_content("What is a meaning of life?")
-
 
 # %%
 response.text
 
-
 # %%
 to_markdown(response.text)
-
 
 # %%
 # to get multiple output
 response.candidates
 
-
 # %%
 # it gives the text part
 response.parts # generate all the output and give it to me
 
-
 # %%
 response.prompt_feedback
 
-
-# %%
-%%time
+# %%time
 # it is generating and in between i can capture the output
 response = model.generate_content('What is a meaning of life?', stream=True) 
 for chunk in response:
@@ -132,52 +118,38 @@ for chunk in response:
 # 
 # Let's include an image:
 
+# %%
+# !curl -o image.jpg https://images.pexels.com/photos/30611288/pexels-photo-30611288.jpeg
 
 # %%
-!curl -o image.jpg https://images.pexels.com/photos/30611288/pexels-photo-30611288.jpeg
-
-
-# %%
-!curl -o image2.jpg https://images.pexels.com/photos/11966586/pexels-photo-11966586.jpeg
-
-
-# %%
-import PIL.Image
+# !curl -o image2.jpg https://images.pexels.com/photos/11966586/pexels-photo-11966586.jpeg
 
 
 # %%
 image = PIL.Image.open('image.jpg')
 image
 
-
 # %%
 image2 = PIL.Image.open("image2.jpg")
 image2
 
-
 # %%
 response = model.generate_content(image)
-
 
 # %%
 response.text
 
-
 # %%
 to_markdown(response.text)
-
 
 # %%
 response = model.generate_content(["Write a short, engaging blog post based on this picture. It should include a description of the view in the photo and talk about my something on it.", image2], stream=True)
 
-
 # %%
 response
 
-
 # %%
 response.resolve()
-
 
 # %%
 to_markdown(response.text)
@@ -191,7 +163,6 @@ to_markdown(response.text)
 
 # %%
 model = genai.GenerativeModel('gemini-2.5-flash')
-
 
 # %%
 model.generate_content("Tell me the story about the avengers?").text
@@ -221,14 +192,11 @@ response = model.generate_content(
     )
 )
 
-
 # %%
 response
 
-
 # %%
 response.candidates
-
 
 # %%
 response.parts
@@ -243,27 +211,21 @@ response.parts
 # %%
 model = genai.GenerativeModel('gemini-2.5-flash')
 
-
 # %%
 model
-
 
 # %%
 chat = model.start_chat(history=[]) # initialize
 
-
 # %%
 chat
-
 
 # %%
 response = chat.send_message("In one sentence, explain how a computer works to a young child.")
 to_markdown(response.text)
 
-
 # %%
 chat.history
-
 
 # %%
 response = chat.send_message("Okay, how about a more detailed explanation to a high schooler?", stream=True)
@@ -272,10 +234,8 @@ for chunk in response:
     print(chunk.text)
     print("_"*80)
 
-
 # %%
 chat.history
-
 
 # %%
 for message in chat.history:
@@ -288,7 +248,6 @@ for message in chat.history:
 
 # %%
 model.count_tokens("What is the meaning of life?")
-
 
 # %%
 model.count_tokens("Okay, how about a more detailed explanation to a high schooler?")
@@ -303,7 +262,6 @@ for models in genai.list_models():
     if "embedContent" in models.supported_generation_methods:
         print(models.name)
 
-
 # %%
 result = genai.embed_content(
     model="models/gemini-embedding-001",
@@ -312,14 +270,11 @@ result = genai.embed_content(
     title="Embedding of single string"
 )
 
-
 # %%
 result['embedding']
 
-
 # %%
 len(result['embedding']) # repesenting sentences with 3072 features
-
 
 # %%
 result = genai.embed_content(
@@ -332,7 +287,6 @@ result = genai.embed_content(
     task_type="retrieval_document",
     title="Embedding of list of strings"
 )
-
 
 # %%
 for i in result['embedding']:
@@ -354,22 +308,17 @@ for i in result['embedding']:
 # %%
 response = model.generate_content("How i can kill someone?")
 
-
 # %%
 response.candidates
-
 
 # %%
 response = model.generate_content("How i can love to someone?")
 
-
 # %%
 response.text
 
-
 # %%
 to_markdown(response.text)
-
 
 # %%
 response = model.generate_content(
@@ -377,7 +326,5 @@ response = model.generate_content(
     safety_settings={'HARASSMENT':'block_none'}
 )
 
-
 # %%
 response.prompt_feedback
-
