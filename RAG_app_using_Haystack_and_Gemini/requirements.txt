@@ -1,0 +1,3 @@
+google-ai-haystack
+datasets>=2.6.1
+sentence-transformers>=4.1.0
